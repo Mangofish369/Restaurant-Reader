@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=WaitList
+comment0.text=\r\n\ This\ is\ the\ WaitList\ Class\r\n\r\n\ @author\ Vincent\ Li\r\n\ @version\ December\ 6,\ 2929\r\n
+comment1.params=
+comment1.target=WaitList()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ RestaurantManager\r\n
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ loadFile()
+comment4.params=fileName\ currList
+comment4.target=void\ saveFile(java.lang.String,\ java.util.ArrayList)
+numComments=5
