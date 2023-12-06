@@ -18,6 +18,8 @@ public class WaitList
 {
     private static Scanner scanner = new Scanner(System.in); 
     private File currFile;
+    private static ArrayList <Customer> customerList = new ArrayList<>();
+    private static String [] question1 = {"First Name: ", "Last Name: ","Party Size: ", "Special Needs: "};
     /**
      * Constructor for objects of class RestaurantManager
      */
@@ -25,8 +27,11 @@ public class WaitList
     {
         
     }
-    public void act(){
-        int yourChoice;
+    
+    public static void main(){
+        String [] reponse = new String[5]; 
+        int pickNum;
+        String yourReponse;
         boolean finished = false;
         loadFile();
         while(!finished){
@@ -34,18 +39,24 @@ public class WaitList
             System.out.println("1. Add Customer");
             System.out.println("6. Exit Program");
             
-            yourChoice = scanner.nextInt();
-            if(yourChoice == 1){
-                
+            pickNum = scanner.nextInt();
+            if(pickNum == 1){
+                for(int i = 1; i < question1.length; i++){
+                    System.out.println(question1[i]);
+                    yourReponse = scanner.nextLine();
+                    reponse[i]= yourReponse;
+                    System.out.println(yourReponse);
+                }
+                addCustomer(reponse);                
             }
-            else if (yourChoice == 6){
-                exit(finished);
+            else if (pickNum == 6){
+                finished = exit();
             }
         }
         
     }
     
-    public void loadFile(){
+    public static void loadFile(){
         try{
             System.out.println("Load new file: (Yes/No)");
             String choice = scanner.nextLine();
@@ -65,7 +76,7 @@ public class WaitList
         }
     }
     
-    public void saveFile(String fileName, ArrayList <Customer> currList){
+    public static void saveFile(String fileName, ArrayList <Customer> currList){
         try{
             FileWriter out = new FileWriter(fileName, true);
             PrintWriter output = new PrintWriter(out);
@@ -75,11 +86,15 @@ public class WaitList
             System.out.println("Exception caught e");
         }
     }
-    public void createCustomer(String input){
-        StringTokenizer tokenizer = new StringTokenizer(input);
+    public static void addCustomer(String [] array){
+        String firstName = array[0];
+        String lastName = array[1];
+        int partySize = Integer.valueOf(array[2]);
+        String specialNeeds = array[3];
         
+        customerList.add(new Customer(firstName,lastName,partySize,specialNeeds));
     }
-    public void exit(boolean isFinished){
-        isFinished = true;
+    public static boolean exit(){
+        return true;
     }
 }
