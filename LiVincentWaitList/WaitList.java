@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 /**
  * This is the WaitList Class
@@ -25,13 +26,21 @@ public class WaitList
         
     }
     public void act(){
-        int yourChoice = scanner.nextInt();
+        int yourChoice;
         boolean finished = false;
         loadFile();
         while(!finished){
             System.out.println("Select a number"); 
             System.out.println("1. Add Customer");
             System.out.println("6. Exit Program");
+            
+            yourChoice = scanner.nextInt();
+            if(yourChoice == 1){
+                
+            }
+            else if (yourChoice == 6){
+                exit(finished);
+            }
         }
         
     }
@@ -66,5 +75,11 @@ public class WaitList
             System.out.println("Exception caught e");
         }
     }
-    
+    public void createCustomer(String input){
+        StringTokenizer tokenizer = new StringTokenizer(input);
+        
+    }
+    public void exit(boolean isFinished){
+        isFinished = true;
+    }
 }
