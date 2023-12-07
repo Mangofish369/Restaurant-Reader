@@ -40,7 +40,10 @@ public class WaitList
         while(!finished){
             System.out.println("Select a number"); 
             System.out.println("1. Add Customer");
-            System.out.println("2. View List" );
+            System.out.println("2. Remove Customer");
+            System.out.println("3. View List");
+            System.out.println("4. Clear Current List");
+            System.out.println("5. Save List");
             System.out.println("6. Exit Program");
             
             pickNum = scanner.nextInt();
@@ -48,7 +51,17 @@ public class WaitList
                 addCustomer();                
             }
             else if (pickNum == 2){
+                customerList.remove(0);
+            }
+            else if (pickNum == 3){
                 viewList();
+            }
+            else if (pickNum == 4){
+                customerList.clear();
+            }
+            
+            else if(pickNum == 5){
+                saveFile(customerList);
             }
             else if (pickNum == 6){
                 finished = exit();
@@ -69,11 +82,12 @@ public class WaitList
                         String fileName = scanner.nextLine();
                         currFile = new File(fileName);
                         
-                        readFile();
-                        finished = true;
+                        
+                        finished = readFile();
                     }
                     catch(InputMismatchException e){
                         System.out.println("Please enter a String");
+                        
                     }
                 }
                 if(choice.equals("No")){
@@ -86,20 +100,32 @@ public class WaitList
         }
     }
     
-    /*
-     * Not finished yet
-     */
-    public static void saveFile(String fileName, ArrayList <Customer> currList){
+    public static void saveFile(ArrayList <Customer> currList){
+        Scanner input = new Scanner(System.in);
         try{
-            FileWriter out = new FileWriter(fileName, true);
-            PrintWriter output = new PrintWriter(out);
-            
+            System.out.println("Enter your choosen file name: ");
+            String fileName = input.nextLine();
+            try{
+                FileWriter out = new FileWriter(fileName, true);
+                PrintWriter writer = new PrintWriter(out);
+                for(int i = 0; i< currList.size(); i++){
+                    writer.println(currList.get(i).toString());
+                }
+                writer.close();
+            }
+            catch(IOException e){
+                System.out.println("Exception caught e");
+            }
         }
-        catch(IOException e){
-            System.out.println("Exception caught e");
+        catch(InputMismatchException e){
+            System.out.println("Error, please enter a string");
         }
     }
     
+    /**
+     * Method to create Customer Object without knowing any details
+     * Ask the user for details about the Customer
+     */
     public static void addCustomer(){
         Scanner input = new Scanner(System.in);
         String [] questions = {"First Name: ", "Last Name: ","Party Size: ", "Special Needs: "};
@@ -124,6 +150,10 @@ public class WaitList
         }
     }
     
+    /**
+     * Method to create a Customer if details of the Customer is known
+     * - Grab the details of the Customer and create the Object
+     */
     public static void addCustomer(String [] details){
         String firstName = details[0];
         String lastName = details[1];
@@ -139,7 +169,7 @@ public class WaitList
         }
     }
     
-    public static void readFile(){
+    public static boolean readFile(){
         Scanner s; 
         boolean moreLines = true;
         try{
@@ -147,14 +177,17 @@ public class WaitList
             while(moreLines){
                 try{
                     readLine(s.nextLine());
+                    
                 }
                 catch (NoSuchElementException e){
                     moreLines = false;
                 }
             }
+            return true;
         }
         catch (FileNotFoundException e){
-            System.out.println("Exception: "+e);
+            System.out.println("Error file not found");
+            return false;
         }
     }
     
@@ -170,9 +203,14 @@ public class WaitList
         addCustomer(details);
     }
     
-    
-    
     public static boolean exit(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Would you like to save your current list: (Yes/No)");
+        String ans = input.nextLine();
+        
+        if(ans.equals("Yes")){
+            saveFile(customerList);
+        }
         return true;
     }
 }
