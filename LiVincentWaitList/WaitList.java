@@ -51,7 +51,12 @@ public class WaitList
                 addCustomer();                
             }
             else if (pickNum == 2){
-                customerList.remove(0);
+                try{
+                    customerList.remove(0);
+                }
+                catch (IndexOutOfBoundsException e){
+                    System.out.println("There is nothing to delete");
+                }
             }
             else if (pickNum == 3){
                 viewList();
