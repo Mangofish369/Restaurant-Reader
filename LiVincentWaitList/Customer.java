@@ -25,4 +25,7 @@ public class Customer
         this.specialRequest = specialRequest;
     }
     
+    public String toString(){
+        return firstName + ","+ lastName + "," + partySize + "," + specialRequest;
+    }
 }
