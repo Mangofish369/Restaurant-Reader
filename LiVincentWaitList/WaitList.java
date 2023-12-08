@@ -13,15 +13,13 @@ import java.util.StringTokenizer;
  * This is the WaitList Class
  *
  * @author Vincent Li
- * @version December 6, 2929
+ * @version December 6, 2023
  */
 public class WaitList
 {
-    private static Scanner scanner = new Scanner(System.in); 
     private static StringTokenizer tokenizer;
     private static File currFile;
     private static ArrayList <Customer> customerList = new ArrayList<>();
-    
     /**
      * Constructor for objects of class RestaurantManager
      */
@@ -31,6 +29,7 @@ public class WaitList
     }
     
     public static void main(){
+        Scanner input = new Scanner (System.in);
         int pickNum;
         boolean finished = false;
         
@@ -38,25 +37,22 @@ public class WaitList
         
         
         while(!finished){
+            System.out.println("\n");
             System.out.println("Select a number"); 
             System.out.println("1. Add Customer");
             System.out.println("2. Remove Customer");
             System.out.println("3. View List");
             System.out.println("4. Clear Current List");
             System.out.println("5. Save List");
-            System.out.println("6. Exit Program");
+            System.out.println("6. Load List");
+            System.out.println("7. Exit Program");
             
-            pickNum = scanner.nextInt();
+            pickNum = input.nextInt();
             if(pickNum == 1){
                 addCustomer();                
             }
             else if (pickNum == 2){
-                try{
-                    customerList.remove(0);
-                }
-                catch (IndexOutOfBoundsException e){
-                    System.out.println("There is nothing to delete");
-                }
+                removeCustomer();
             }
             else if (pickNum == 3){
                 viewList();
@@ -69,22 +65,25 @@ public class WaitList
                 saveFile(customerList);
             }
             else if (pickNum == 6){
+                loadFile();
+            }
+            else if (pickNum == 7){
                 finished = exit();
             }
         }
-        
-    }
+    }   
     
     public static void loadFile(){
+        Scanner input = new Scanner (System.in);
         boolean finished = false;
         while(!finished){
             try{
                 System.out.println("Load new file: (Yes/No)");
-                String choice = scanner.nextLine();
+                String choice = input.nextLine();
                 if(choice.equals("Yes")){
                     try{
                         System.out.println("Type the file name please: ");
-                        String fileName = scanner.nextLine();
+                        String fileName = input.nextLine();
                         currFile = new File(fileName);
                         
                         
@@ -168,9 +167,38 @@ public class WaitList
         customerList.add(new Customer(firstName,lastName,partySize,specialNeeds));
     }
     
+    public static void removeCustomer(){
+        Scanner input = new Scanner (System.in);
+        viewList();
+        System.out.println("\n");
+        try{
+            System.out.println("Which customer do you want to remove? (List Number)");
+            int index = input.nextInt() - 1;
+            
+            try{
+                customerList.remove(index);
+            }
+            catch(IndexOutOfBoundsException e){
+                System.out.println("That was not a valid number"); 
+            }
+        }
+        catch (InputMismatchException e){
+            System.out.println("Please enter an integer");
+        }
+        
+    }
+    
     public static void viewList(){
-        for(Customer c : customerList){
-            System.out.println(c);
+        int count = 1;
+        System.out.println("\n");
+        if(customerList.isEmpty()){
+            System.out.println("Customer list is empty");
+        }
+        else{
+            for(Customer c : customerList){
+                System.out.println(count + ": "+c);
+                count ++;
+            }
         }
     }
     
@@ -197,10 +225,9 @@ public class WaitList
     }
     
     public static void readLine(String s){
-        System.out.println(s);
         String [] details = new String [5];
         tokenizer = new StringTokenizer(s, ",");
-        int index = 0;
+        int index = 0   ;
         while(tokenizer.hasMoreTokens()){
             details[index] = tokenizer.nextToken();
             index++; 
@@ -210,6 +237,7 @@ public class WaitList
     
     public static boolean exit(){
         Scanner input = new Scanner(System.in);
+        System.out.println("\n");
         System.out.println("Would you like to save your current list: (Yes/No)");
         String ans = input.nextLine();
         

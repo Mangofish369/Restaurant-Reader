@@ -26,6 +26,6 @@ public class Customer
     }
     
     public String toString(){
-        return firstName + ","+ lastName + "," + partySize + "," + specialRequest;
+        return firstName + ","+"\t"+ lastName + "," +"\t"+ partySize + ","+"\t" + specialRequest;
     }
 }
