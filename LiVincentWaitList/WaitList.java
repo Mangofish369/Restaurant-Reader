@@ -37,6 +37,7 @@ public class WaitList
         
         
         while(!finished){
+            // Print out options for user 
             System.out.println("\n");
             System.out.println("Select a number"); 
             System.out.println("1. Add Customer");
