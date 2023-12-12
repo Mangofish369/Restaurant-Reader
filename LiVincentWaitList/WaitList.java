@@ -162,7 +162,13 @@ public class WaitList
     public static void addCustomer(String [] details){
         String firstName = details[0];
         String lastName = details[1];
-        int partySize = Integer.valueOf(details[2]);
+        int partySize = 0;
+        try{
+            partySize = Integer.valueOf(details[2]);
+        }
+        catch (NumberFormatException e){
+            
+        }
         String specialNeeds = details[3]; 
         
         customerList.add(new Customer(firstName,lastName,partySize,specialNeeds));
