@@ -35,7 +35,7 @@ public class WaitList
         
         loadFile();
         
-        
+        // Main loop runs until user chooses to exit
         while(!finished){
             // Print out options for user 
             System.out.println("\n");
@@ -74,9 +74,14 @@ public class WaitList
         }
     }   
     
+    /**
+     * Method to load file from storage to RAM
+     */
     public static void loadFile(){
         Scanner input = new Scanner (System.in);
         boolean finished = false;
+        
+        // If the file fails to load, keep asking the user if they want to try again
         while(!finished){
             try{
                 System.out.println("Load new file: (Yes/No)");
@@ -85,14 +90,19 @@ public class WaitList
                     try{
                         System.out.println("Type the file name please: ");
                         String fileName = input.nextLine();
-                        currFile = new File(fileName);
                         
+                        // Check that the file name meets the regex requriements, 
+                        //to prevent users from accessing other directories
+                        if(fileName.contains("#%&{}\\<>*?/ $!\":@+`|=")){
+                            System.out.println("Invalid file name");
+                            return;
+                        }
+                        currFile = new File(fileName);
                         
                         finished = readFile();
                     }
                     catch(InputMismatchException e){
                         System.out.println("Please enter a String");
-                        
                     }
                 }
                 if(choice.equals("No")){
@@ -105,11 +115,21 @@ public class WaitList
         }
     }
     
+    /**
+     * Convert ArrayList into a file, move from RAM to storage
+     */
     public static void saveFile(ArrayList <Customer> currList){
         Scanner input = new Scanner(System.in);
         try{
             System.out.println("Enter your choosen file name: ");
             String fileName = input.nextLine();
+            
+            // Prevent file naming of illegal windows characters
+            if(fileName.contains("#%&{}\\<>*?/ $!\":@+`|=")){
+                System.out.println("Invalid file name");
+                return;
+            }
+            
             try{
                 FileWriter out = new FileWriter(fileName, true);
                 PrintWriter writer = new PrintWriter(out);
@@ -133,16 +153,18 @@ public class WaitList
      */
     public static void addCustomer(){
         Scanner input = new Scanner(System.in);
-        String [] questions = {"First Name: ", "Last Name: ","Party Size: ", "Special Needs: "};
+        String [] questions = {"First Name: ", "Last Name: ","Party Size: ", "Special Needs: "}; // Store the questions in a loop
         String [] details = new String[5];
         
         try{
+            // Iterate through the loop of questions to save lines of code
             for(int i = 0; i < questions.length; i++){
                 System.out.println(questions[i]);
                 String ans = input.nextLine();
                 details[i] = ans; 
             }
             
+            // Convert answer into variables that can be added to the Customer.class parameters
             String firstName = details[0];
             String lastName = details[1];
             int partySize = Integer.valueOf(details[2]);
@@ -156,10 +178,10 @@ public class WaitList
     }
     
     /**
-     * Method to create a Customer if details of the Customer is known
-     * - Grab the details of the Customer and create the Object
+     * Simple Constructor for Customer, used to convert file information into Customer Objects
      */
     public static void addCustomer(String [] details){
+        // Convert String array into usable variables for Customer constructor
         String firstName = details[0];
         String lastName = details[1];
         int partySize = 0;
@@ -174,13 +196,16 @@ public class WaitList
         customerList.add(new Customer(firstName,lastName,partySize,specialNeeds));
     }
     
+    /**
+     * Method to remove Customers from the ArrayList at any index
+     */
     public static void removeCustomer(){
         Scanner input = new Scanner (System.in);
-        viewList();
+        viewList(); // Print out the current list, so the user can see which customer to remove (to be seated)
         System.out.println("\n");
         try{
             System.out.println("Which customer do you want to remove? (List Number)");
-            int index = input.nextInt() - 1;
+            int index = input.nextInt() - 1; // Real life Lists start at 1, java lists start at 0
             
             try{
                 customerList.remove(index);
@@ -195,20 +220,27 @@ public class WaitList
         
     }
     
+    /**
+     * Loop through current list of customers and print them out in numeric order
+     */
     public static void viewList(){
-        int count = 1;
+        int count = 1; //Real life lists start at index 1
+        
         System.out.println("\n");
         if(customerList.isEmpty()){
             System.out.println("Customer list is empty");
         }
         else{
             for(Customer c : customerList){
-                System.out.println(count + ": "+c);
+                System.out.println(count + ": "+c); //Print the number in line + customer details
                 count ++;
             }
         }
     }
     
+    /**
+     * Loop through the file and output each line as a String
+     */
     public static boolean readFile(){
         Scanner s; 
         boolean moreLines = true;
@@ -217,7 +249,6 @@ public class WaitList
             while(moreLines){
                 try{
                     readLine(s.nextLine());
-                    
                 }
                 catch (NoSuchElementException e){
                     moreLines = false;
@@ -231,6 +262,9 @@ public class WaitList
         }
     }
     
+    /**
+     * Get a string input, use string tokenizer to break up the string input into a String array
+     */
     public static void readLine(String s){
         String [] details = new String [5];
         tokenizer = new StringTokenizer(s, ",");
@@ -242,6 +276,9 @@ public class WaitList
         addCustomer(details);
     }
     
+    /**
+     * Method to exit program, ask the user if they want to save their file before exiting
+     */
     public static boolean exit(){
         Scanner input = new Scanner(System.in);
         System.out.println("\n");
